@@ -1,0 +1,10 @@
+{
+  "id": "temp-b127",
+  "name": "Temperature salle serveurs",
+  "unit": "C",
+  "min": -10,
+  "max": 50,
+  "threshold": 28,
+  "direction": "above",
+  "active": true
+}

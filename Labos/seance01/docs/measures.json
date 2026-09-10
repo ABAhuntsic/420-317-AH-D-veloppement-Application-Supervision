@@ -1,0 +1,5 @@
+[
+  { "sensor": "temp-b127", "value": 22.4, "createdAt": "2026-09-10T14:32:05.412Z" },
+  { "sensor": "temp-b127", "value": 22.7, "createdAt": "2026-09-10T14:32:07.410Z" },
+  { "sensor": "temp-b127", "value": 28.9, "createdAt": "2026-09-10T14:32:09.408Z" }
+]
