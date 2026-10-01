@@ -1,9 +1,11 @@
 import Measure from "../models/measure.model.js";
 import { buildFilter, buildSort } from "../utils/query.js";
 
-// La couche a change de support : elle passe d'un tableau en memoire a
-// MongoDB. Son interface, elle, n'a pas bouge -- c'est ce qui permet aux
-// controleurs de rester identiques.
+// measures est EN LECTURE SEULE : aucune mesure n'est creee par une route
+// HTTP. add() reste exportee car le capteur simule (et plus tard MQTT,
+// seance 14) l'appelle directement depuis index.js -- jamais via un
+// controleur. Il n'y a donc pas de replace() ni de remove() : ces routes
+// n'existent pas.
 
 export async function add({ sensor, value }) {
   return Measure.create({ sensor, value });
@@ -22,21 +24,6 @@ export async function getById(id) {
 
 export async function getLatest() {
   return Measure.findOne().sort({ createdAt: -1 }).populate("sensor", "name unit");
-}
-
-export async function replace(id, { sensor, value }) {
-  // new: true renvoie le document A JOUR (sinon on recoit l'ancien).
-  // runValidators: true applique les contraintes du schema a la mise a jour.
-  return Measure.findByIdAndUpdate(
-    id,
-    { sensor, value },
-    { new: true, runValidators: true },
-  );
-}
-
-export async function remove(id) {
-  const deleted = await Measure.findByIdAndDelete(id);
-  return deleted !== null;
 }
 
 export async function getStats() {

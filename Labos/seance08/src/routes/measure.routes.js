@@ -1,19 +1,17 @@
 import { Router } from "express";
 import * as controller from "../controllers/measure.controller.js";
-import { validateObjectId } from "../middlewares/objectId.middleware.js";
-import { validateMeasure } from "../middlewares/measure.validator.js";
+import { validateMeasureId } from "../middlewares/measure.validator.js";
 
 const router = Router();
 
-// Les routes fixes AVANT les routes a parametre, sinon /latest serait
-// capture par /:id.
+// Ressource EN LECTURE SEULE : quatre GET, rien d'autre. Aucune route
+// POST/PUT/DELETE : personne ne cree de mesure a travers l'API.
+//
+// Routes fixes avant la route a parametre, sinon /latest et /stats
+// seraient captures par /:id.
 router.get("/", controller.list);
 router.get("/latest", controller.getLatest);
 router.get("/stats", controller.getStats);
-router.get("/:id", validateObjectId, controller.getOne);
-
-router.post("/", validateMeasure, controller.create);
-router.put("/:id", validateObjectId, validateMeasure, controller.replace);
-router.delete("/:id", validateObjectId, controller.remove);
+router.get("/:id", validateMeasureId, controller.getOne);
 
 export default router;

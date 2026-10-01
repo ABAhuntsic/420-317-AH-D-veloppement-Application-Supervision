@@ -1,18 +1,9 @@
-import { body, validationResult } from "express-validator";
+import { param } from "express-validator";
+import { handleValidationErrors } from "./validationErrors.middleware.js";
 
-// Le middleware s'execute AVANT le controleur : quand celui-ci demarre,
-// les donnees sont deja saines.
-export const validateMeasure = [
-  body("sensor").isMongoId()
-    .withMessage("sensor doit etre l'identifiant d'un capteur existant"),
-  body("value").isFloat()
-    .withMessage("value doit etre un nombre"),
-
-  (req, res, next) => {
-    const errors = validationResult(req);
-    if (!errors.isEmpty()) {
-      return res.status(400).json({ errors: errors.array() });
-    }
-    next();
-  },
+// measures est en lecture seule : on ne valide donc que l'identifiant
+// dans l'URL, jamais de corps de requete.
+export const validateMeasureId = [
+  param("id").isMongoId().withMessage("Identifiant invalide"),
+  handleValidationErrors,
 ];

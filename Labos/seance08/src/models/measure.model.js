@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const measureSchema = new mongoose.Schema({
   sensor: {
-    type: mongoose.Schema.Types.ObjectId,
+    type: String,           // pas ObjectId : Sensor a un _id texte
     ref: "Sensor",
     required: true,
     index: true,
@@ -10,6 +10,8 @@ const measureSchema = new mongoose.Schema({
   value: {
     type: Number,
     required: true,
+    min: -100,
+    max: 20000,
   },
   createdAt: {
     type: Date,

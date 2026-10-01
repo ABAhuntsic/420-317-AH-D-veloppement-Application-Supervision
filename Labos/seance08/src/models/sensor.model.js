@@ -1,16 +1,20 @@
 import mongoose from "mongoose";
 
 const sensorSchema = new mongoose.Schema({
+  // _id choisi par l'utilisateur, pas genere par Mongo : cet identifiant
+  // deviendra le nom du sujet MQTT auquel le serveur s'abonne (seance 14).
+  _id: {
+    type: String,
+    required: true,
+    match: /^[a-zA-Z0-9_-]+$/,
+  },
   name: { type: String, required: true, trim: true },
   room: { type: String, trim: true },
   unit: { type: String, required: true, trim: true },
 
-  // Bornes physiques : dependent du capteur choisi pour le projet final.
   min: { type: Number, required: true },
   max: { type: Number, required: true },
 
-  // Le seuil et sa direction appartiennent au capteur, pas a la mesure.
-  // C'est ici que le Monitor lira ses regles.
   threshold: { type: Number, required: true },
   direction: { type: String, required: true, enum: ["above", "below"] },
 

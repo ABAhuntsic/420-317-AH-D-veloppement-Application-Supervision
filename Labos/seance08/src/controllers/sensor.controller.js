@@ -22,9 +22,24 @@ export async function getOne(req, res, next) {
 
 export async function create(req, res, next) {
   try {
-    // Plus de champ id : MongoDB genere _id lui-meme.
-    const { name, room, unit, min, max, threshold, direction } = req.body;
-    res.status(201).json(await service.add({ name, room, unit, min, max, threshold, direction }));
+    const { id, name, room, unit, min, max, threshold, direction } = req.body;
+    res.status(201).json(await service.create({ id, name, room, unit, min, max, threshold, direction }));
+  } catch (error) {
+    if (error.code === 11000) {
+      return res.status(409).json({ error: "Cet identifiant de capteur est deja utilise" });
+    }
+    next(error);
+  }
+}
+
+export async function replace(req, res, next) {
+  try {
+    const { name, room, unit, min, max, threshold, direction, active } = req.body;
+    const updated = await service.replace(req.params.id, { name, room, unit, min, max, threshold, direction, active });
+    if (!updated) {
+      return res.status(404).json({ error: "Capteur introuvable" });
+    }
+    res.status(200).json(updated);
   } catch (error) {
     next(error);
   }
